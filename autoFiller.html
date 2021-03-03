@@ -1,0 +1,92 @@
+<html>
+    <head>
+        <script src="AutoFiller.js"></script>
+    </head>
+    <body>
+        TEST
+        <br>
+        <div id = "specialDiv">
+            <button id = "specialButton" onClick= "autoFill()" > test </button>
+        </div>
+
+        <div id="response">
+            about
+        </div>
+
+        <h2>RadioDNS Lookup</h2>
+
+        <table><tbody><tr><td valign="top">
+        <form action="https://radiodns.org/nwp/tools/?" id = "fmForm">
+        <fieldset style="width:150px;"><legend>FM</legend>
+        <input id="action" name="action" type="hidden" value="rdns">
+        <input name="bearer" value="fm" type="hidden">
+
+        <label for="country"><acronym title="global country code">GCC</acronym>:</label>
+        <input id="country" type="text" name="country" length="3"><br>
+
+        <label for="pi">PI code: </label>
+        <input id="pi" type="text" name="pi" length="4"><br>
+
+        <label for="freq">Frequency: </label>
+        <input id="freq" type="text" name="freq" length="6"> 
+
+        <em>Visuals</em>
+        <br>
+        <label for="freq">X-Dimension: </label>
+        <input id="x-size" type="text" name="x-size" length="4" value="640"> 
+
+        <label for="freq">Y-Dimension: </label>
+        <input id="y-size" type="text" name="y-size" length="4" value="480"> 
+
+        <input type="hidden" name="cachebuster" id="cachebuster" value="0.82486000+1614798919">
+        <br>
+
+        <input class="go_button" type="submit" value="go"><br>
+
+        Examples:<br>
+        <a href="https://radiodns.org/nwp/tools/#" onclick="rdns_fm(&#39;ce1&#39;,&#39;c479&#39;,&#39;95.8&#39;);return false;">Capital 95.8FM, UK</a><br>
+        </fieldset>
+        </form>
+        </td><td valign="top">
+        <form action="https://radiodns.org/nwp/tools/?">
+        <fieldset style="width:150px;"><legend>DAB</legend>
+        <input id="action" name="action" type="hidden" value="rdns">
+        <input name="bearer" value="dab" type="hidden">
+
+        <label for="ecc"><acronym title="global country code">GCC</acronym>: </label>
+        <input id="ecc" type="text" name="ecc" length="3"><br>
+
+        <label for="eid"><acronym title="ensemble id">EID</acronym>: </label>
+        <input id="eid" type="text" name="eid" length="4"><br>
+
+        <label for="sid"><acronym title="service id">SID</acronym>: </label>
+        <input id="sid" type="text" name="sid" length="4"><br>
+
+        <label for="freq"><acronym title="service component id within the service">SCIDS</acronym>: </label>
+        <input id="scids" type="text" name="scids" length="6"> 
+
+        <em>Visuals</em>
+        <br>
+        <label for="freq">X-Dimension: </label>
+        <input id="x-size" type="text" name="x-size" length="4" value="640"> 
+
+        <label for="freq">Y-Dimension: </label>
+        <input id="y-size" type="text" name="y-size" length="4" value="480"> 
+        <input type="hidden" name="cachebuster" id="cachebuster" value="0.82486600+1614798919">
+        <br>
+
+        <input class="go_button" type="submit" value="go"><br>
+
+
+        Examples:<br>
+        <a href="https://radiodns.org/nwp/tools/#" onclick="rdns_dab(&#39;ce1&#39;,&#39;C1CE&#39;,&#39;C7D8&#39;,&#39;0&#39;);return false;">Planet Rock, UK</a><br>
+        <a href="https://radiodns.org/nwp/tools/#" onclick="rdns_dab(&#39;de0&#39;,&#39;10A5&#39;,&#39;D318&#39;,&#39;0&#39;);return false;">Antenne Bayern, DE</a><br>
+
+        </fieldset>
+
+
+        </form>
+        </td>
+        </tr></tbody></table>
+    </body>
+</html>
