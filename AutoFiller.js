@@ -41,12 +41,28 @@ var reqURL = "https://limitless-wildwood-84731.herokuapp.com/https://radiodns.or
 const http = new XMLHttpRequest();
 
 //test stations
-var station_1 = new FMStation("ce1", "c479", "95.8");
-var station_2 = new FMStation("USA", "202", "9090");
-var station_3 = new FMStation("RUS", "210", "998.1");
-var stations = [station_1, station_2, station_3];
+var station_example = new FMStation("ce1", "c479", "95.8");
+var stations = [];
 
-var counter = 0;
+var counter = 5;
+
+function beginParse(){
+    var inputJson = document.getElementById("inputField").value;
+    var grid = JSON.parse(inputJson);
+    var total_stations = Object.keys(grid["PI Code"]).length;
+    var country = "ce1";
+    document.getElementById("response").innerText = "total stations: " + total_stations;
+    console.log(grid);
+    
+    for(var i = 0; i < total_stations; i++){
+        var key = Object.keys(grid["PI Code"])[i];
+        var newstation = new FMStation(country, grid["PI Code"][key].toLowerCase(), grid.Frequency[key]);
+        stations.push(newstation);
+        //console.log(newstation);
+    }
+
+    autoFill();
+}
 
 //populate and submit the form
 function autoFill(){
@@ -62,7 +78,12 @@ function autoFill(){
     thisURL = reqURL.replace("${a}", a).replace("${b}", b).replace("${c}", c);
     console.log(thisURL);
     http.open("GET", thisURL);
-    http.send();
+    try{    http.send();}
+    catch{
+        counter++;
+        autoFill();
+    }
+
 }
 
 //process url request
@@ -82,7 +103,8 @@ http.onreadystatechange = (e) => {
             document.getElementById("response").innerHTML += ("\n" + response.body.innerHTML); //retrieve data
             counter++;
             if (counter < stations.length){ //iterate
-                setTimeout(autoFill, randomWait());
+                autoFill();
+                //setTimeout(autoFill, randomWait());
             }
             //
 
