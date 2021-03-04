@@ -28,14 +28,15 @@ function randomWait(){
 
 //station class
 class FMStation{
-    constructor(country, pi, freq){
+    constructor(country, pi, freq, id){
         this.country = country;
         this.pi = pi;
         this.freq = freq;
+        this.id = id;
     }
 
     toString(){
-        return "\nStation: " + this.freq.toString();
+        return "\nStation #: " + this.id + " FREQ: " + this.freq.toString();
     }
 }
 
@@ -47,7 +48,6 @@ const http = new XMLHttpRequest();
 //test stations
 var station_example = new FMStation("ce1", "c479", "95.8");
 var stations = [];
-
 var counter = 0;
 
 //Parse json input and begin loop
@@ -56,12 +56,12 @@ function beginParse(){
     var grid = JSON.parse(inputJson);
     var total_stations = Object.keys(grid["PI Code"]).length;
     var country = "ce1";
-    document.getElementById("response").innerText = "total stations: " + total_stations;
+    //document.getElementById("response").innerText = "total stations: " + total_stations;
     console.log(grid);
     
     for(var i = 0; i < total_stations; i++){
         var key = Object.keys(grid["PI Code"])[i];
-        var newstation = new FMStation(country, grid["PI Code"][key].toLowerCase(), grid.Frequency[key]);
+        var newstation = new FMStation(country, grid["PI Code"][key].toLowerCase(), grid.Frequency[key], i);
         stations.push(newstation);
         //console.log(newstation);
     }
@@ -85,7 +85,6 @@ function autoFill(){
     http.open("GET", thisURL);  
     http.send();
     document.getElementById("response").innerHTML += ("\n" + stations[counter].toString());
-
 }
 
 //process url request
@@ -111,11 +110,11 @@ http.onreadystatechange = (e) => {
                 buttn[0].remove();
             }
 
-            document.getElementById("response").innerHTML += ("\n" + response.body.innerHTML); //retrieve data
+            document.getElementById("response").innerHTML += ("\n" + response.body.innerHTML + ","); //retrieve data
             iterate();
         }
         else{
-            document.getElementById("response").innerHTML += ("\nerror on station " + (counter+1)); //retrieve data
+            document.getElementById("response").innerHTML += ("\nerror on station " + (counter+1) +  + ","); //retrieve data
             iterate();
               // Oh no! There has been an error with the request!
         }
@@ -124,13 +123,14 @@ http.onreadystatechange = (e) => {
     }
 }
 
+var timer;
 function iterate(){
     counter++;
     if (counter < stations.length){ //iterate
-        setTimeout(autoFill, randomWait());
+        timer = setTimeout(autoFill, randomWait());
     }
 }
 
 function stopParse(){
-    clearInterval(autoFill);
+    clearInterval(timer);
 }
