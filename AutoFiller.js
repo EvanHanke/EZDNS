@@ -33,19 +33,24 @@ class FMStation{
         this.pi = pi;
         this.freq = freq;
     }
+
+    toString(){
+        return "\nStation: " + this.freq.toString();
+    }
 }
 
 //default request url
 //via my CORS ANYWHERE server
-var reqURL = "https://limitless-wildwood-84731.herokuapp.com/https://radiodns.org/nwp/tools/?action=rdns&bearer=fm&country=${a}&pi=${b}&freq=${c}&x-size=640&y-size=480";
+const reqURL = "https://limitless-wildwood-84731.herokuapp.com/https://radiodns.org/nwp/tools/?action=rdns&bearer=fm&country=${a}&pi=${b}&freq=${c}&x-size=640&y-size=480";
 const http = new XMLHttpRequest();
 
 //test stations
 var station_example = new FMStation("ce1", "c479", "95.8");
 var stations = [];
 
-var counter = 5;
+var counter = 0;
 
+//Parse json input and begin loop
 function beginParse(){
     var inputJson = document.getElementById("inputField").value;
     var grid = JSON.parse(inputJson);
@@ -64,7 +69,7 @@ function beginParse(){
     autoFill();
 }
 
-//populate and submit the form
+//send http request for station
 function autoFill(){
     var station = stations[counter];
 
@@ -77,12 +82,9 @@ function autoFill(){
     //console.log(document.body.innerText);
     thisURL = reqURL.replace("${a}", a).replace("${b}", b).replace("${c}", c);
     console.log(thisURL);
-    http.open("GET", thisURL);
-    try{    http.send();}
-    catch{
-        counter++;
-        autoFill();
-    }
+    http.open("GET", thisURL);  
+    http.send();
+    document.getElementById("response").innerHTML += ("\n" + stations[counter].toString());
 
 }
 
@@ -94,22 +96,41 @@ http.onreadystatechange = (e) => {
 
             //on successful request            
             var response = new DOMParser().parseFromString(http.responseText, 'text/html');
+
             //remove raw image data from html output
             var slide = response.getElementById("slide");
             if(slide != null){
                 response.getElementById("slide").remove();
             }
-            //append data to output
-            document.getElementById("response").innerHTML += ("\n" + response.body.innerHTML); //retrieve data
-            counter++;
-            if (counter < stations.length){ //iterate
-                autoFill();
-                //setTimeout(autoFill, randomWait());
+            var script = response.getElementsByTagName("script");
+            if(script.length > 0){
+                script[0].remove();
             }
-            //
+            var buttn = response.getElementsByTagName("button");
+            if(buttn.length > 0){
+                buttn[0].remove();
+            }
 
+            document.getElementById("response").innerHTML += ("\n" + response.body.innerHTML); //retrieve data
+            iterate();
+        }
+        else{
+            document.getElementById("response").innerHTML += ("\nerror on station " + (counter+1)); //retrieve data
+            iterate();
+              // Oh no! There has been an error with the request!
         }
     } else {
-          // Oh no! There has been an error with the request!
+        //error
     }
+}
+
+function iterate(){
+    counter++;
+    if (counter < stations.length){ //iterate
+        setTimeout(autoFill, randomWait());
+    }
+}
+
+function stopParse(){
+    clearInterval(autoFill);
 }
