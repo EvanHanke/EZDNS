@@ -18,6 +18,11 @@ function rdns_fm(country,pi,freq) {
 *
 */
 
+//'wait' macro to split up requests 4-8 seconds
+function randomWait(){
+    return ((Math.random()*4000.0)+4000.0);
+}
+
 //station class
 class FMStation{
     constructor(country, pi, freq){
@@ -68,7 +73,7 @@ http.onreadystatechange = (e) => {
             document.getElementById("response").innerHTML += ("<br>" + response.body.innerText); //retrieve data
             counter++;
             if (counter < stations.length){ //iterate
-                autoFill();
+                setTimeout(autoFill, randomWait());
             }
             //
 
