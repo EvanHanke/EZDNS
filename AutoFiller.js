@@ -1,5 +1,6 @@
 /*Code I copied from saved_resource.html body*/
 //simply populates the given form with the given argument
+/*
 function rdns_fm(country,pi,freq) {
     document.getElementById('country').value=country;
     document.getElementById('pi').value=pi;
@@ -12,15 +13,17 @@ function rdns_fm(country,pi,freq) {
     document.getElementById('sid').value=sid;
     document.getElementById('scids').value=scids;
     }
+
 //
+*/
 
 /*My code
-*
+* E. Hanke 2021
 */
 
 //'wait' macro to split up requests 4-8 seconds
 function randomWait(){
-    return ((Math.random()*4000.0)+4000.0);
+    return ((Math.random()*4000.0)+1000.0);
 }
 
 //station class
@@ -53,7 +56,7 @@ function autoFill(){
     let b = station.pi;
     let c = station.freq;
     
-    rdns_fm(a, b, c);
+    //rdns_fm(a, b, c);
     //document.getElementById("fmForm").submit();
     //console.log(document.body.innerText);
     thisURL = reqURL.replace("${a}", a).replace("${b}", b).replace("${c}", c);
@@ -70,7 +73,13 @@ http.onreadystatechange = (e) => {
 
             //on successful request            
             var response = new DOMParser().parseFromString(http.responseText, 'text/html');
-            document.getElementById("response").innerHTML += ("<br>" + response.body.innerText); //retrieve data
+            //remove raw image data from html output
+            var slide = response.getElementById("slide");
+            if(slide != null){
+                response.getElementById("slide").remove();
+            }
+            //append data to output
+            document.getElementById("response").innerHTML += ("\n" + response.body.innerHTML); //retrieve data
             counter++;
             if (counter < stations.length){ //iterate
                 setTimeout(autoFill, randomWait());
