@@ -42,13 +42,27 @@ class FMStation{
 
 //default request url
 //via my CORS ANYWHERE server
-const reqURL = "https://limitless-wildwood-84731.herokuapp.com/https://radiodns.org/nwp/tools/?action=rdns&bearer=fm&country=${a}&pi=${b}&freq=${c}&x-size=640&y-size=480";
+//https://radiodns.org/technical/testing-tools/
+const reqURL = "https://radiodns.org/nwp/tools/?action=rdns&bearer=fm&country=${a}&pi=${b}&freq=${c}&x-size=640&y-size=480";
 const http = new XMLHttpRequest();
 
 //test stations
-var station_example = new FMStation("ce1", "c479", "95.8");
+var station_example = new FMStation("ao0", "87.7", "10af");
 var stations = [];
 var counter = 0;
+
+//country = ae0
+//freq = 87.7
+//pi = 10af
+
+//test();
+
+function test(){
+
+    stations.push(station_example);
+    autoFill();
+}
+
 
 //Parse json input and begin loop
 function beginParse(){
